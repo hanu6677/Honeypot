@@ -1,0 +1,2 @@
+Synthetic internal security notes.
+No real credentials are stored.
