@@ -2350,5 +2350,47 @@
         "event_type": "SESSION_ENDED",
         "severity": "LOW",
         "description": "HTTP session ended for /sadownload.mcafee.com:443"
+    },
+    {
+        "timestamp": "2026-08-29T05:43:27.021664+00:00",
+        "session_id": "SES-9BEA40D4",
+        "event_type": "HTTP_REQUEST",
+        "severity": "LOW",
+        "description": "CONNECT /sadownload.mcafee.com:443 | IP=127.0.0.1 | UA=UNKNOWN"
+    },
+    {
+        "timestamp": "2026-08-29T05:43:27.026137+00:00",
+        "session_id": "SES-9BEA40D4",
+        "event_type": "HTTP_RESPONSE",
+        "severity": "LOW",
+        "description": "CONNECT /sadownload.mcafee.com:443 | Status=404"
+    },
+    {
+        "timestamp": "2026-08-29T05:43:27.029233+00:00",
+        "session_id": "SES-9BEA40D4",
+        "event_type": "SESSION_ENDED",
+        "severity": "LOW",
+        "description": "HTTP session ended for /sadownload.mcafee.com:443"
+    },
+    {
+        "timestamp": "2026-08-29T05:43:27.036270+00:00",
+        "session_id": "SES-6B2DCE3C",
+        "event_type": "HTTP_REQUEST",
+        "severity": "LOW",
+        "description": "CONNECT /sadownload.mcafee.com:443 | IP=127.0.0.1 | UA=UNKNOWN"
+    },
+    {
+        "timestamp": "2026-08-29T05:43:27.040119+00:00",
+        "session_id": "SES-6B2DCE3C",
+        "event_type": "HTTP_RESPONSE",
+        "severity": "LOW",
+        "description": "CONNECT /sadownload.mcafee.com:443 | Status=404"
+    },
+    {
+        "timestamp": "2026-08-29T05:43:27.042838+00:00",
+        "session_id": "SES-6B2DCE3C",
+        "event_type": "SESSION_ENDED",
+        "severity": "LOW",
+        "description": "HTTP session ended for /sadownload.mcafee.com:443"
     }
 ]
