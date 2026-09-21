@@ -1,0 +1,40 @@
+============================================================
+             DECEPTION SECURITY REPORT
+============================================================
+
+SESSION INFORMATION
+------------------------------------------------------------
+Session ID : SES-4D261B4A
+Source     : LOCAL-WINDOWS-TEST
+Start Time : 2026-09-18T10:48:57.312303+00:00
+End Time   : 2026-09-18T10:51:28.103573+00:00
+
+RISK ASSESSMENT
+------------------------------------------------------------
+Risk Score : 0/100
+Risk Level : LOW
+Events     : 0
+
+BEHAVIOR ANALYSIS
+------------------------------------------------------------
+Status     : NORMAL
+No suspicious behavior detected.
+
+BEHAVIOR INDICATORS
+------------------------------------------------------------
+No behavior indicators.
+
+MITRE ATT&CK MAPPING
+------------------------------------------------------------
+No MITRE ATT&CK techniques mapped.
+
+EVENT SUMMARY
+------------------------------------------------------------
+
+RECOMMENDATIONS
+------------------------------------------------------------
+• No immediate action required; continue monitoring.
+
+============================================================
+Report generated at: 2026-09-18T10:51:28.103672+00:00
+============================================================

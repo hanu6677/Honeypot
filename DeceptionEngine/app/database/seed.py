@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+import hashlib
 from .db import get_connection
 DEPARTMENTS = [
     "Engineering",
@@ -89,6 +91,43 @@ TICKETS = [
         "investigating",
     ),
 ]
+REPOSITORIES = [
+    (
+        "repo-payment-api",
+        "payment-api",
+        "PRJ-1001",
+        "internal",
+        "main",
+    ),
+    (
+        "repo-internal-ai",
+        "internal-ai",
+        "PRJ-1002",
+        "internal",
+        "develop",
+    ),
+    (
+        "repo-customer-portal",
+        "customer-portal",
+        "PRJ-1003",
+        "internal",
+        "main",
+    ),
+    (
+        "repo-fraud-engine",
+        "fraud-engine",
+        "PRJ-1004",
+        "internal",
+        "develop",
+    ),
+]
+COMMIT_MESSAGES = [
+    "Initial project structure",
+    "Update API validation",
+    "Fix database connection handling",
+    "Improve authentication middleware",
+    "Add monitoring support",
+]
 def seed_database():
     connection = get_connection()
     cursor = connection.cursor()
@@ -162,5 +201,89 @@ def seed_database():
             """,
             ticket,
         )
+
+        # Repositories
+
+    for repository in REPOSITORIES:
+
+        repository_id, name, project_code, visibility, branch = repository
+
+        cursor.execute(
+            """
+            SELECT id
+            FROM projects
+            WHERE project_id = ?
+            """,
+            (project_code,),
+        )
+
+        project = cursor.fetchone()
+
+        if project:
+
+            cursor.execute(
+                """
+                INSERT OR IGNORE INTO repositories
+                (
+                    repository_id,
+                    name,
+                    project_id,
+                    visibility,
+                    branch
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    repository_id,
+                    name,
+                    project["id"],
+                    visibility,
+                    branch,
+                ),
+            )
+                # Synthetic commits
+
+    cursor.execute("""
+        SELECT
+            repositories.id,
+            repositories.name
+        FROM repositories
+    """)
+
+    repositories = cursor.fetchall()
+
+    for repository in repositories:
+
+        for index, message in enumerate(COMMIT_MESSAGES):
+
+            commit_hash = hashlib.sha1(
+                f"{repository['name']}-{index}".encode()
+            ).hexdigest()[:10]
+
+            created_at = (
+                datetime.now()
+                - timedelta(days=30 - index * 5)
+            ).isoformat()
+
+            cursor.execute(
+                """
+                INSERT OR IGNORE INTO commits
+                (
+                    commit_hash,
+                    repository_id,
+                    author,
+                    message,
+                    created_at
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    commit_hash,
+                    repository["id"],
+                    "Aarav Sharma",
+                    message,
+                    created_at,
+                ),
+            )
     connection.commit()
     connection.close()

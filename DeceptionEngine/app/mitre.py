@@ -4,7 +4,6 @@ MITRE_MAPPING = {
         "name": "System Owner/User Discovery",
         "tactic": "Discovery",
     },
-
     "DIRECTORY_DISCOVERY": {
         "technique": "T1083",
         "name": "File and Directory Discovery",
@@ -24,6 +23,41 @@ MITRE_MAPPING = {
     },
 
     "SENSITIVE_FILE_ACCESS": {
+        "technique": "T1005",
+        "name": "Data from Local System",
+        "tactic": "Collection",
+    },
+        "EMPLOYEE_DIRECTORY_ACCESS": {
+        "technique": "T1083",
+        "name": "File and Directory Discovery",
+        "tactic": "Discovery",
+    },
+
+    "PROJECT_DIRECTORY_ACCESS": {
+        "technique": "T1083",
+        "name": "File and Directory Discovery",
+        "tactic": "Discovery",
+    },
+
+    "REPOSITORY_DISCOVERY": {
+        "technique": "T1083",
+        "name": "File and Directory Discovery",
+        "tactic": "Discovery",
+    },
+
+    "REPOSITORY_ACCESS": {
+        "technique": "T1083",
+        "name": "File and Directory Discovery",
+        "tactic": "Discovery",
+    },
+
+    "COMMIT_HISTORY_ACCESS": {
+        "technique": "T1005",
+        "name": "Data from Local System",
+        "tactic": "Collection",
+    },
+
+    "TICKET_DATABASE_ACCESS": {
         "technique": "T1005",
         "name": "Data from Local System",
         "tactic": "Collection",

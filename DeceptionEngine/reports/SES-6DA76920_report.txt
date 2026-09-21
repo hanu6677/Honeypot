@@ -1,0 +1,40 @@
+============================================================
+             DECEPTION SECURITY REPORT
+============================================================
+
+SESSION INFORMATION
+------------------------------------------------------------
+Session ID : SES-6DA76920
+Source     : LOCAL-WINDOWS-TEST
+Start Time : 2026-09-17T06:02:15.451942+00:00
+End Time   : 2026-09-17T06:02:18.699092+00:00
+
+RISK ASSESSMENT
+------------------------------------------------------------
+Risk Score : 0/100
+Risk Level : LOW
+Events     : 0
+
+BEHAVIOR ANALYSIS
+------------------------------------------------------------
+Status     : NORMAL
+No suspicious behavior detected.
+
+BEHAVIOR INDICATORS
+------------------------------------------------------------
+No behavior indicators.
+
+MITRE ATT&CK MAPPING
+------------------------------------------------------------
+No MITRE ATT&CK techniques mapped.
+
+EVENT SUMMARY
+------------------------------------------------------------
+
+RECOMMENDATIONS
+------------------------------------------------------------
+• No immediate action required; continue monitoring.
+
+============================================================
+Report generated at: 2026-09-17T06:02:18.699184+00:00
+============================================================

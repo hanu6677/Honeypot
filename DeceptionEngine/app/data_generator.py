@@ -52,7 +52,7 @@ def generate_employee():
             "Database Administrator",
             "System Administrator",
         ]),
-    }
+    } 
 def generate_project():
     return {
         "project_id": f"PRJ-{random.randint(1000, 9999)}",

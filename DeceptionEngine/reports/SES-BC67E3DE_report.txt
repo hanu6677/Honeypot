@@ -1,0 +1,55 @@
+============================================================
+             DECEPTION SECURITY REPORT
+============================================================
+
+SESSION INFORMATION
+------------------------------------------------------------
+Session ID : SES-BC67E3DE
+Source     : LOCAL-WINDOWS-TEST
+Start Time : 2026-09-05T10:39:17.314842+00:00
+End Time   : 2026-09-05T10:39:17.400756+00:00
+
+RISK ASSESSMENT
+------------------------------------------------------------
+Risk Score : 98/100
+Risk Level : CRITICAL
+Events     : 4
+
+BEHAVIOR ANALYSIS
+------------------------------------------------------------
+Status     : SUSPICIOUS
+[MEDIUM] Multiple internal resources discovered.
+[HIGH] Internal repository enumeration detected.
+[HIGH] Repository commit history accessed.
+[HIGH] High-value internal resources accessed.
+[CRITICAL] Possible systematic reconnaissance pattern detected.
+
+BEHAVIOR INDICATORS
+------------------------------------------------------------
+• Multiple internal resources discovered.
+• Internal repository enumeration detected.
+• Repository commit history accessed.
+• High-value internal resources accessed.
+• Possible systematic reconnaissance pattern detected.
+
+MITRE ATT&CK MAPPING
+------------------------------------------------------------
+T1083 | File and Directory Discovery | Discovery
+T1005 | Data from Local System | Collection
+
+EVENT SUMMARY
+------------------------------------------------------------
+1. PROJECT_DIRECTORY_ACCESS | MEDIUM | Decoy project directory accessed.
+2. REPOSITORY_DISCOVERY | HIGH | Internal decoy repository discovered.
+3. REPOSITORY_ACCESS | HIGH | Decoy repository accessed.
+4. COMMIT_HISTORY_ACCESS | HIGH | Repository commit history accessed.
+
+RECOMMENDATIONS
+------------------------------------------------------------
+• Investigate the session as a high-priority security event.
+• Review all decoy resources accessed during the session.
+• Escalate the event for security investigation.
+
+============================================================
+Report generated at: 2026-09-05T10:39:17.401201+00:00
+============================================================

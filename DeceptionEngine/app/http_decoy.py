@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from .events import record_event
 from .session import Session
+from .database.db import get_connection
 from .data_generator import (
     generate_employee,
     generate_project,
@@ -280,20 +281,155 @@ async def tickets(request: Request):
     return {
         "tickets": tickets_data
     }
-@app.get("/api/repositories")
+@app.get("/repositories")
 async def repositories(request: Request):
     session = request.state.session
 
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            repositories.repository_id,
+            repositories.name,
+            projects.project_id,
+            projects.name AS project_name,
+            repositories.visibility,
+            repositories.branch
+        FROM repositories
+        LEFT JOIN projects
+            ON repositories.project_id = projects.id
+        ORDER BY repositories.id
+    """)
+
+    rows = cursor.fetchall()
+    connection.close()
+
+    data = [dict(row) for row in rows]
+
     record_event(
         event_type="REPOSITORY_DISCOVERY",
-        description="Synthetic internal repositories accessed",
+        description="Internal repositories discovered",
         severity="HIGH",
         session_id=session.session_id,
     )
 
     return {
-        "repositories": [
-            generate_repository()
-            for _ in range(5)
-        ]
+        "repositories": data
+    }
+@app.get("/repositories/{repository_name}")
+async def repository_detail(
+    repository_name: str,
+    request: Request
+):
+    session = request.state.session
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            repositories.repository_id,
+            repositories.name,
+            repositories.visibility,
+            repositories.branch,
+            projects.project_id,
+            projects.name AS project_name
+        FROM repositories
+        LEFT JOIN projects
+            ON repositories.project_id = projects.id
+        WHERE repositories.name = ?
+    """, (repository_name,))
+
+    repository = cursor.fetchone()
+
+    if repository is None:
+        connection.close()
+
+        record_event(
+            event_type="UNKNOWN_REPOSITORY_ACCESS",
+            description=f"Unknown repository requested: {repository_name}",
+            severity="MEDIUM",
+            session_id=session.session_id,
+        )
+
+        return {
+            "error": "Repository not found"
+        }
+
+    data = dict(repository)
+
+    connection.close()
+
+    record_event(
+        event_type="REPOSITORY_ACCESS",
+        description=f"Repository accessed: {repository_name}",
+        severity="HIGH",
+        session_id=session.session_id,
+    )
+
+    return data
+@app.get("/repositories/{repository_name}/commits")
+async def repository_commits(
+    repository_name: str,
+    request: Request
+):
+    session = request.state.session
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            repositories.id
+        FROM repositories
+        WHERE repositories.name = ?
+    """, (repository_name,))
+
+    repository = cursor.fetchone()
+
+    if repository is None:
+        connection.close()
+
+        record_event(
+            event_type="UNKNOWN_REPOSITORY_ACCESS",
+            description=f"Commit history requested for unknown repository: {repository_name}",
+            severity="MEDIUM",
+            session_id=session.session_id,
+        )
+
+        return {
+            "error": "Repository not found"
+        }
+
+    cursor.execute("""
+        SELECT
+            commit_hash,
+            author,
+            message,
+            created_at
+        FROM commits
+        WHERE repository_id = ?
+        ORDER BY created_at DESC
+    """, (repository["id"],))
+
+    commits = cursor.fetchall()
+
+    connection.close()
+
+    commit_data = [
+        dict(row)
+        for row in commits
+    ]
+
+    record_event(
+        event_type="COMMIT_HISTORY_ACCESS",
+        description=f"Repository commit history accessed: {repository_name}",
+        severity="HIGH",
+        session_id=session.session_id,
+    )
+
+    return {
+        "repository": repository_name,
+        "commits": commit_data
     }

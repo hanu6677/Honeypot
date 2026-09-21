@@ -1,71 +1,111 @@
-from .filesystem import build_environment
-from .events import record_event
 from .session import Session
-from .commands import CommandEngine
-from .analyzer import analyze_session
+from .events import record_event
+from .risk_engine import RiskEngine
+from .report_generator import SecurityReportGenerator
+
+
 def main():
-    print("=" * 55)
-    print("       DECEPTION-AS-A-SERVICE")
-    print("       Windows Deception Terminal")
-    print("=" * 55)
-    build_environment()
-    session = Session(source="LOCAL-TEST")
-    print(f"\n[+] Session started: {session.session_id}")
-    record_event(
-        event_type="SESSION_STARTED",
-        description="New deception session started",
-        severity="LOW",
-        session_id=session.session_id,
+
+    print("=" * 60)
+    print("      DECEPTION-AS-A-SERVICE")
+    print("      Autonomous Honeypot Generator")
+    print("=" * 60)
+
+    # -----------------------------
+    # START SESSION
+    # -----------------------------
+
+    session = Session(
+        source="LOCAL-WINDOWS-TEST"
     )
-    terminal = CommandEngine(session.session_id)
-    print("\nType 'exit' to close the session.\n")
-    while True:
-        try:
-            command = input(
-                f"{terminal.prompt_path()}> "
-            )
-            if command.lower() == "exit":
-                break
-            result = terminal.execute(command)
-            if result:
-                print(result)
-        except KeyboardInterrupt:
-            print("\n[!] Session interrupted.")
-            break
+
+    print(
+        f"\n[+] Session started: "
+        f"{session.session_id}"
+    )
+
+    # -----------------------------
+    # TEST EVENTS
+    # -----------------------------
+
+    events = []
+
+    events.append(
+        record_event(
+            event_type="PROJECT_DIRECTORY_ACCESS",
+            description="Decoy project directory accessed.",
+            severity="MEDIUM",
+            session_id=session.session_id,
+        )
+    )
+
+    events.append(
+        record_event(
+            event_type="REPOSITORY_DISCOVERY",
+            description="Internal decoy repository discovered.",
+            severity="HIGH",
+            session_id=session.session_id,
+        )
+    )
+
+    events.append(
+        record_event(
+            event_type="REPOSITORY_ACCESS",
+            description="Decoy repository accessed.",
+            severity="HIGH",
+            session_id=session.session_id,
+        )
+    )
+
+    events.append(
+        record_event(
+            event_type="COMMIT_HISTORY_ACCESS",
+            description="Repository commit history accessed.",
+            severity="HIGH",
+            session_id=session.session_id,
+        )
+    )
+
+    # -----------------------------
+    # END SESSION
+    # -----------------------------
+
     session.end()
-    analysis = analyze_session(session.session_id)
-    print("\n" + "=" * 55)
-    print("             SESSION RISK REPORT")
-    print("=" * 55)
 
-    print(f"Session ID : {session.session_id}")
-    print(f"Events     : {analysis['event_count']}")
-    print(f"Risk Score : {analysis['score']}/100")
-    print(f"Risk Level : {analysis['level']}")
-
-    print("\nMITRE ATT&CK")
-    print("-" * 55)
-
-    for technique in analysis["mitre_techniques"]:
-        print(
-        f"{technique['technique']} | "
-        f"{technique['name']} | "
-        f"{technique['tactic']}"
+    print(
+        f"\n[+] Session ended: "
+        f"{session.session_id}"
     )
 
-    print("=" * 55)
-    print(f"Session ID : {session.session_id}")
-    print(f"Events     : {analysis['event_count']}")    
-    print(f"Risk Score : {analysis['score']}/100")
-    print(f"Risk Level : {analysis['level']})")
+    # -----------------------------
+    # RISK ANALYSIS
+    # -----------------------------
 
-    print("=" * 55)
-    record_event(
-        event_type="SESSION_ENDED",
-        description="Deception session ended",
-        severity="LOW",
-        session_id=session.session_id,
+    risk_engine = RiskEngine()
+
+    analysis = risk_engine.analyze(
+        events
     )
-    print(f"\n[+] Session ended: {session.session_id}")
+
+    # -----------------------------
+    # GENERATE REPORT
+    # -----------------------------
+
+    generator = SecurityReportGenerator()
+
+    report_text, report_path = generator.generate(
+        session,
+        events,
+        analysis,
+    )
+
+    print("\n" + report_text)
+
+    print(
+        f"\n[+] Security report saved to:"
+        f"\n    {report_path}"
+    )
+
+
 if __name__ == "__main__":
     main()
